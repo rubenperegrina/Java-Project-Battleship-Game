@@ -48,7 +48,7 @@ public class MyProjectApplication {
             player.save(p6);
 
             GamePlayer gp1 = new GamePlayer(p1, g1);
-            GamePlayer gp2 = new GamePlayer(p5, g1);
+            GamePlayer gp2 = new GamePlayer(p2, g1);
             GamePlayer gp3 = new GamePlayer(p3, g2);
             GamePlayer gp4 = new GamePlayer(p4, g2);
             GamePlayer gp5 = new GamePlayer(p5, g3);
