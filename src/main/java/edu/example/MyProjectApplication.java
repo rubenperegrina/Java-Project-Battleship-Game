@@ -46,6 +46,7 @@ public class MyProjectApplication {
             player.save(p4);
             player.save(p5);
             player.save(p6);
+            player.save(p6);
 
 			//jshdjshd
 
