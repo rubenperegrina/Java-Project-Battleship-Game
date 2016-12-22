@@ -46,9 +46,6 @@ public class MyProjectApplication {
             player.save(p4);
             player.save(p5);
             player.save(p6);
-            player.save(p6);
-
-			//jshdjshd
 
             GamePlayer gp1 = new GamePlayer(p1, g1);
             GamePlayer gp2 = new GamePlayer(p5, g1);
