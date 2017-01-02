@@ -78,6 +78,8 @@ import static java.util.stream.Collectors.toList;
                 .filter(gp -> gp.getGame().getId() == nn)
                 .map(v -> getViewGamePlayer(v)).collect(toList()));
 
+        myViewGame.put("ships", repoGP.findOne(nn).ships.stream().map(s -> getShipDto(s)).collect(toList()));
+
         return myViewGame;
     }
 
@@ -91,6 +93,14 @@ import static java.util.stream.Collectors.toList;
                 myViewGamePlayer.put("player", getGamePlayerDto(gamePlayer));
                 return myViewGamePlayer;
             }
+
+    public Map<String, Object> getShipDto(Ship ship) {
+        Map<String, Object> myShipDto = new LinkedHashMap<>();
+
+        myShipDto.put("type", ship.getShip());
+        myShipDto.put("location", ship.getLocations());
+        return myShipDto;
+    }
 }
 
 
