@@ -14,7 +14,19 @@ table {
     text-align: center;
 }
 
+
 .heads {
     background-color: black;
     color: white;
 }
+
+.ship {
+    background: darkslategrey;
+}
+
+#names {
+    background-color:dimgrey;
+    font-size: 30px;
+    color: white;
+}
+

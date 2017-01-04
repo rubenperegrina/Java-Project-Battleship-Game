@@ -2,85 +2,6 @@
  * Created by rubenperegrina on 2/1/17.
  */
 
-/*
- drawGrid();
-
- function drawGrid() {
-
- var gridhtml = document.getElementById("gridship");
-
- var leters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
- var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-
- var table = "<table><tbody>";
-
- for (var i = 0; i < numbers.length; i++) {
-
- table += "<th>" + numbers[i] + "</th>";
-
- for (var j =1; j < leters.length;j++) {
-
- table += "<td>" + leters[i] + "</td>";
- }
- }
- table += "</tbody></table>";
- gridhtml.innerHTML = table;
- }
- */
-
-
-/*drawGrid();
-
- function drawGrid()
- {
- for (var i = 1; i <= 100; i++) {
-
- if (i < 11) {
- $(".table").prepend("<span class='aTops'>" + Math.abs(i - 11) + "</span>");
- $(".grid").append("<li class='points Casilla' id= " + i + "><span class='hole'></li>");
- } else {
- $(".grid").append("<li class='points Casilla' id= " + i + "'><span class='hole'></li>");
- }
- if (i == 11) {
- $(".table").prepend("<span class='aTops hidezero'>" + Math.abs(i - 11) + "</span>");
- }
- if (i > 90) {
- $(".table").append("<span class='aLeft'>" +
- String.fromCharCode(97 + (i - 91)).toUpperCase() + "</span>");
- }
- }
- }*/
-
-
-/*gridship();
-
-function gridship() {
-
-    var gridhtml = document.getElementById("gridship");
-
-    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-    var leters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-
-    /!*var tabla = "<table><tbody><th> </th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>";*!/
-    for (var j = 1; j < numbers.length; j++) {
-        var tabla = "<table><thead><th>" + numbers[j] + "</th></thead>"
-    }
-
-    for (var i = 0; i < leters.length; i++) {
-
-        tabla += "<tbody><tr>";
-
-        tabla += "<td>" + leters[i] + "</td>"
-
-        tabla += "</tr>"
-
-    }
-    tabla += "</tbody></table>"
-
-    gridhtml.innerHTML = tabla;
-
-}*/
-
 
 
 var numbers = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -118,3 +39,80 @@ function drawGrid(cells) {
 }
 
 drawGrid(10);
+
+drawShips();
+
+function getParameterByName(name, url) {
+    if (!url) {
+        url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function drawShips () {
+
+
+     var nn = getParameterByName('gp');
+
+    /*console.log(nn);*/
+
+    $.getJSON('/api/game_view/' + nn, function(data) {
+
+        /*console.log(data);*/
+
+
+        $.each(data.ships, function (ship) {
+
+            var location = data.ships[ship].location;
+
+            /*console.log(location);*/
+
+            $.each(location, function (cell) {
+
+
+            $('#' + location[cell]).addClass("ship")
+            })
+        })
+
+        $.each(data.gamePlayers, function(player) {
+
+            var email = data.gamePlayers[player].player.email;
+            var id = data.gamePlayers[player].id;
+
+            if (nn == id) {
+
+                $("#names").append(email + "(You)");
+            }
+            else {
+
+                $("#names").append(email);
+            }
+
+            /*$("#names").append(email);*/
+
+            console.log(email);
+        })
+
+    } )
+}
+
+
+/*
+function drawNames () {
+
+    $.getJSON('/api/game_view/' + nn, function(email) {
+
+        $.each(email.email, function(email) {
+
+            var name = data.Gameplayer[0].player.email;
+
+            console.log(name);
+        })
+    })
+    $("#names")
+}*/

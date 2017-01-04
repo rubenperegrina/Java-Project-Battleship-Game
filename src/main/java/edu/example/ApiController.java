@@ -69,13 +69,14 @@ import static java.util.stream.Collectors.toList;
 //GAMEVIEW
 
     @RequestMapping("/game_view/{nn}")
+    // TODO
     public Map <String, Object> getGame_View(@PathVariable Long nn) {
         Map<String, Object> myViewGame = new LinkedHashMap<>();
 
         myViewGame.put("id", nn);
         myViewGame.put("creation", repoGP.findOne(nn).getCretionDate());
-        myViewGame.put("gamePlayers", repoGP.findAll().stream()
-                .filter(gp -> gp.getGame().getId() == nn)
+        myViewGame.put("gamePlayers", repoGP.findOne(nn).getGame().getGameplayers().stream()
+
                 .map(v -> getViewGamePlayer(v)).collect(toList()));
 
         myViewGame.put("ships", repoGP.findOne(nn).ships.stream().map(s -> getShipDto(s)).collect(toList()));

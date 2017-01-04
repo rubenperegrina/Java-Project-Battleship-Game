@@ -46,7 +46,10 @@ public class Game {
         return id;
     }
 
-    /*public Map<String, Object> getDto() {
+    public Set<GamePlayer> getGameplayers() {
+        return gameplayers;
+    }
+/*public Map<String, Object> getDto() {
         Map<String, Object> myDto = new LinkedHashMap<>();
 
         myDto.put("id", this.id);
