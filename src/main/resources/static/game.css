@@ -30,3 +30,18 @@ table {
     color: white;
 }
 
+//SALVOES//////////////////////////////////
+
+#salvonames {
+    background-color:dimgrey;
+    font-size: 30px;
+    color: white;
+}
+
+.salvocell {
+    background: blue;
+}
+
+.shoot {
+    background:red;
+}

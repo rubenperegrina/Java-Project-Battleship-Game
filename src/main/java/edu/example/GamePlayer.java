@@ -3,9 +3,6 @@ import javax.persistence.*;
 import java.util.*;
 
 
-//ManyToOne
-//Field Game and Player
-
 /**
  * Created by rubenperegrina on 13/12/16.
  */
@@ -36,6 +33,18 @@ public class GamePlayer {
         this.ships.add(ship);
     }
 
+    @OneToMany (mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    public Set<Salvo> salvo;
+
+    public void addSalvo(Salvo salvo) {
+        salvo.setGamePlayer(this);
+        this.salvo.add(salvo);
+    }
+
+    public Set<Salvo> getSalvo() {
+        return salvo;
+    }
+
     public GamePlayer() {
     }
 
@@ -54,6 +63,7 @@ public class GamePlayer {
         this.game = game;
         this.creationDate = new Date();
         this.ships = new HashSet<>();
+        this.salvo = new HashSet<>();
     }
     public Date getCretionDate() {
         return creationDate;
@@ -61,13 +71,4 @@ public class GamePlayer {
     public void setCreationDate(Date date){
         this.creationDate = date;
     }
-
-    /*public Map<String, Object> getDto() {
-        Map<String, Object> myDto = new LinkedHashMap<>();
-
-        myDto.put("id", this.id);
-        myDto.put("player", this.player.getDto());
-        return myDto;
-    }*/
-
 }

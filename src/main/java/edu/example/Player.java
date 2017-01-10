@@ -51,13 +51,4 @@ public class Player {
     public void setEmail(String emailName) {
         email = emailName;
     }
-
-    /*public Map<String, Object> getDto() {
-        Map<String, Object> dto = new LinkedHashMap<>();
-
-        dto.put("id", this.id);
-        dto.put("email", this.email);
-        dto.put("name", this.name);
-        return dto;
-    }*/
 }

@@ -49,12 +49,4 @@ public class Game {
     public Set<GamePlayer> getGameplayers() {
         return gameplayers;
     }
-/*public Map<String, Object> getDto() {
-        Map<String, Object> myDto = new LinkedHashMap<>();
-
-        myDto.put("id", this.id);
-        myDto.put("creation", this.creationDate);
-        myDto.put("gamePlayers", this.gameplayers.stream().map(gp -> gp.getDto()).collect(toList()));
-        return myDto;
-    }*/
 }

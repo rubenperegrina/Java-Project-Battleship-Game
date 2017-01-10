@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.mapping;
@@ -36,15 +34,6 @@ import static java.util.stream.Collectors.toList;
     public List<Object> getALL() {
         return repoG.findAll().stream().map(g -> getGameDto(g) ).collect(Collectors.toList());
     }
-    /*//Player
-    public Map<String, Object> getDto1() {
-        Map<String, Object> MyDto = new LinkedHashMap<>();
-
-        MyDto.put("id", Player.getId());
-        MyDto.put("email", Player.getEmail());
-        MyDto.put("name", Player.getName());
-        return MyDto;
-    }*/
 
     //Game
     public Map<String, Object> getGameDto(Game game) {
@@ -66,20 +55,24 @@ import static java.util.stream.Collectors.toList;
         return myGamePlayerDto;
     }
 
-//GAMEVIEW
+////GAMEVIEW
 
     @RequestMapping("/game_view/{nn}")
-    // TODO
+
     public Map <String, Object> getGame_View(@PathVariable Long nn) {
         Map<String, Object> myViewGame = new LinkedHashMap<>();
 
         myViewGame.put("id", nn);
-        myViewGame.put("creation", repoGP.findOne(nn).getCretionDate());
-        myViewGame.put("gamePlayers", repoGP.findOne(nn).getGame().getGameplayers().stream()
+        GamePlayer gameplayer = repoGP.findOne(nn);
+        myViewGame.put("creation", gameplayer.getCretionDate());
+        myViewGame.put("gamePlayers", gameplayer.getGame().getGameplayers().stream()
 
                 .map(v -> getViewGamePlayer(v)).collect(toList()));
 
-        myViewGame.put("ships", repoGP.findOne(nn).ships.stream().map(s -> getShipDto(s)).collect(toList()));
+        myViewGame.put("ships", gameplayer.ships.stream().map(s -> getShipDto(s)).collect(toList()));
+        myViewGame.put("salvoes", gameplayer.getGame().getGameplayers().stream().map(sal -> getSalvoDto(sal.getSalvo())).collect(toList()));
+
+        /*myViewGame.put("salvoes", repoGP.findOne(nn).salvo.stream().map(sal -> getSalvoDto(sal)).collect(toList()));*/
 
         return myViewGame;
     }
@@ -92,6 +85,7 @@ import static java.util.stream.Collectors.toList;
                 myViewGamePlayer.put("id", gamePlayer.getId());
 
                 myViewGamePlayer.put("player", getGamePlayerDto(gamePlayer));
+
                 return myViewGamePlayer;
             }
 
@@ -102,6 +96,39 @@ import static java.util.stream.Collectors.toList;
         myShipDto.put("location", ship.getLocations());
         return myShipDto;
     }
+
+    private List<Map<String, Object>> getSalvoDto(Set<Salvo> salvoes) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Salvo salvo : salvoes) {
+            Map<String, Object> salvoMap = new LinkedHashMap<>();
+            long turn = salvo.getTurn();
+            List<String> salvoLocations = salvo.getLocations();
+            long id = salvo.getGamePlayer().getPlayer().getId();
+
+            salvoMap.put("turn", turn);
+            salvoMap.put("player", id);
+            salvoMap.put("locations", salvoLocations);
+
+            result.add(salvoMap);
+        }
+        /*mySalvoDto.put("turn", salvo.getTurn());
+        mySalvoDto.put("player", salvo.gamePlayer.getPlayer().getId());
+        mySalvoDto.put("location", salvo.getLocations());
+
+        mySalvoDto.put("salvoes", repoGP.findOne(nn).salvo.stream().map(salgp -> getSalDto(salvo)).collect(toList()));*/
+
+        return result;
+    }
+
+    /*public Map<String, Object> getSalDto(Salvo salvo) {
+        Map<String, Object> mySalDto = new LinkedHashMap<>();
+
+        mySalDto.put("player", salvo.gamePlayer.getPlayer().getId());
+        mySalDto.put("location", salvo.getLocations());
+
+        return mySalDto;
+    }*/
 }
 
 

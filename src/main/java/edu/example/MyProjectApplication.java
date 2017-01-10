@@ -17,7 +17,7 @@ public class MyProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship) {
+	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository Salvo) {
 		return (args) -> {
 
             Game g1 = new Game();
@@ -33,14 +33,7 @@ public class MyProjectApplication {
             g2.addSeconds(3600);
             g3.addSeconds(7200);
 
-            game.save(g1);
-            game.save(g2);
-            game.save(g3);
-            game.save(g4);
-            game.save(g5);
-            game.save(g6);
-            game.save(g7);
-            game.save(g8);
+
 
 
 
@@ -87,20 +80,7 @@ public class MyProjectApplication {
             GamePlayer gp13 = new GamePlayer(p7, g8);
             GamePlayer gp14 = new GamePlayer(p3, g8);
 
-            gamePlayer.save(gp1);
-            gamePlayer.save(gp2);
-            gamePlayer.save(gp3);
-            gamePlayer.save(gp4);
-            gamePlayer.save(gp5);
-            gamePlayer.save(gp6);
-            gamePlayer.save(gp7);
-            gamePlayer.save(gp8);
-            gamePlayer.save(gp9);
-            gamePlayer.save(gp10);
-            gamePlayer.save(gp11);
-            gamePlayer.save(gp12);
-            gamePlayer.save(gp13);
-            gamePlayer.save(gp14);
+
 
 
 
@@ -113,6 +93,29 @@ public class MyProjectApplication {
             List<String> loc7 = Arrays.asList("C6", "C7");
             List<String> loc8 = Arrays.asList("A2", "A3", "A4");
             List<String> loc9 = Arrays.asList("G6", "H6");
+
+
+            Salvo sal1 = new Salvo(1, loc4);
+            Salvo sal2 = new Salvo(2, loc1);
+            Salvo sal3 = new Salvo(1, loc5);
+            Salvo sal4 = new Salvo(2, loc9);
+            Salvo sal5 = new Salvo(1, loc5);
+            Salvo sal6 = new Salvo(2, loc6);
+            Salvo sal7 = new Salvo(1, loc7);
+            Salvo sal8 = new Salvo(2, loc8);
+            Salvo sal9 = new Salvo(1, loc9);
+            Salvo sal10 = new Salvo(3, loc1);
+            Salvo sal11 = new Salvo(1, loc1);
+            Salvo sal12 = new Salvo(2, loc2);
+            Salvo sal13 = new Salvo(1, loc3);
+            Salvo sal14 = new Salvo(2, loc4);
+            Salvo sal15 = new Salvo(1, loc5);
+            Salvo sal16 = new Salvo(2, loc6);
+            Salvo sal17 = new Salvo(1, loc7);
+            Salvo sal18 = new Salvo(2, loc8);
+            Salvo sal19 = new Salvo(1, loc9);
+            Salvo sal20 = new Salvo(3, loc1);
+
 
 
 
@@ -191,6 +194,66 @@ public class MyProjectApplication {
             gp14.addShip(s27);
 
 
+            gp1.addSalvo(sal1);
+            gp1.addSalvo(sal2);
+
+            gp2.addSalvo(sal3);
+            gp2.addSalvo(sal4);
+
+            gp3.addSalvo(sal5);
+            gp3.addSalvo(sal6);
+
+            gp4.addSalvo(sal7);
+            gp4.addSalvo(sal8);
+
+            gp5.addSalvo(sal9);
+            gp5.addSalvo(sal10);
+
+            gp6.addSalvo(sal11);
+            gp6.addSalvo(sal12);
+
+            gp7.addSalvo(sal13);
+            gp7.addSalvo(sal14);
+
+            gp8.addSalvo(sal15);
+            gp8.addSalvo(sal16);
+
+            gp9.addSalvo(sal17);
+            gp9.addSalvo(sal18);
+
+            gp10.addSalvo(sal19);
+            gp10.addSalvo(sal20);
+
+
+            game.save(g1);
+            game.save(g2);
+            game.save(g3);
+            game.save(g4);
+            game.save(g5);
+            game.save(g6);
+            game.save(g7);
+            game.save(g8);
+
+
+            gamePlayer.save(gp1);
+            gamePlayer.save(gp2);
+            gamePlayer.save(gp3);
+            gamePlayer.save(gp4);
+            gamePlayer.save(gp5);
+            gamePlayer.save(gp6);
+            gamePlayer.save(gp7);
+            gamePlayer.save(gp8);
+            gamePlayer.save(gp9);
+            gamePlayer.save(gp10);
+            gamePlayer.save(gp11);
+            gamePlayer.save(gp12);
+            gamePlayer.save(gp13);
+            gamePlayer.save(gp14);
+
+
+
+
+
 
             ship.save(s1);
             ship.save(s2);
@@ -219,6 +282,17 @@ public class MyProjectApplication {
             ship.save(s25);
             ship.save(s26);
             ship.save(s27);
+
+            Salvo.save(sal1);
+            Salvo.save(sal2);
+            Salvo.save(sal3);
+            Salvo.save(sal4);
+            Salvo.save(sal5);
+            Salvo.save(sal6);
+            Salvo.save(sal7);
+            Salvo.save(sal8);
+            Salvo.save(sal9);
+            Salvo.save(sal10);
 		};
 	}
 }
