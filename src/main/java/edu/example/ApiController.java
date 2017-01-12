@@ -52,6 +52,10 @@ import static java.util.stream.Collectors.toList;
         myGamePlayerDto.put("id", gamePlayer.getPlayer().getId());
         myGamePlayerDto.put("player", gamePlayer.getPlayer().getName());
         myGamePlayerDto.put("email", gamePlayer.getPlayer().getEmail());
+
+        if(gamePlayer.getGameScore() != null) {
+            myGamePlayerDto.put("score", gamePlayer.getGameScore().getScore());
+        }
         return myGamePlayerDto;
     }
 

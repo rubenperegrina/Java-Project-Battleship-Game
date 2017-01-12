@@ -27,6 +27,8 @@ public class Game {
 
     private Date creationDate;
 
+    @OneToMany(mappedBy = "game" , fetch = FetchType.EAGER)
+    public Set<GameScore> gamescores;
 
 
     public Game() {

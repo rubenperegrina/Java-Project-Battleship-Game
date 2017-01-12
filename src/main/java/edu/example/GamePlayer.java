@@ -71,4 +71,8 @@ public class GamePlayer {
     public void setCreationDate(Date date){
         this.creationDate = date;
     }
+
+    public GameScore getGameScore() {
+    return player.getGamescores(game);
+    }
 }

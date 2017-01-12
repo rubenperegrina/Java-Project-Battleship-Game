@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -17,9 +18,11 @@ public class MyProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository Salvo) {
+	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository Salvo, GameScoreRepository GameScore) {
 		return (args) -> {
 
+
+            //NEW GAME/////////////////////////
             Game g1 = new Game();
             Game g2 = new Game();
             Game g3 = new Game();
@@ -30,13 +33,14 @@ public class MyProjectApplication {
             Game g8 = new Game();
 
 
+            //ADDSECONDS/////////////////////////
             g2.addSeconds(3600);
             g3.addSeconds(7200);
 
 
 
 
-
+            //NEW PLAYER/////////////////////////
             Player p1 = new Player("Jack Bauer", "jackbauer@gmail.com");
             Player p2 = new Player("Chloe O'Brian", "chloeobrian@gmail.com");
             Player p3 = new Player("Kim Bauer", "kimbauer@gmail.com");
@@ -47,6 +51,7 @@ public class MyProjectApplication {
             Player p8 = new Player("Leo Vince", "leovince@gmail.com");
 
 
+            //PLAYER SAVE/////////////////////////
             player.save(p1);
             player.save(p2);
             player.save(p3);
@@ -57,7 +62,7 @@ public class MyProjectApplication {
             player.save(p8);
 
 
-
+            //NEW GAMEPLAYER/////////////////////////
             GamePlayer gp1 = new GamePlayer(p1, g1);
             GamePlayer gp2 = new GamePlayer(p2, g1);
 
@@ -83,7 +88,7 @@ public class MyProjectApplication {
 
 
 
-
+            //LOC/////////////////////////
             List<String> loc1 = Arrays.asList("H2", "H3", "H4");
             List<String> loc2 = Arrays.asList("E1", "F1", "G1");
             List<String> loc3 = Arrays.asList("B4", "B5");
@@ -95,6 +100,8 @@ public class MyProjectApplication {
             List<String> loc9 = Arrays.asList("G6", "H6");
 
 
+
+            //NEW SALVO/////////////////////////
             Salvo sal1 = new Salvo(1, loc4);
             Salvo sal2 = new Salvo(2, loc1);
             Salvo sal3 = new Salvo(1, loc5);
@@ -118,7 +125,15 @@ public class MyProjectApplication {
 
 
 
+            //NEW GAMESCORE/////////////////////////
+            GameScore gs1 = new GameScore(g1, p1, 1, new Date());
+            GameScore gs2 = new GameScore(g1, p2, 0, new Date());
+            GameScore gs3 = new GameScore(g2, p3, 0, new Date());
+            GameScore gs4 = new GameScore(g2, p2, 1, new Date());
 
+
+
+            //NEW SHIP/////////////////////////
             Ship s1 = new Ship("Destroyer", loc1);
             Ship s2 = new Ship("Submarine", loc2);
             Ship s3 = new Ship("Patrol Boat", loc3);
@@ -148,6 +163,8 @@ public class MyProjectApplication {
             Ship s27 = new Ship("Patrol Board", loc9);
 
 
+
+            //ADDSHIP /////////////////////////
             gp1.addShip(s1);
             gp1.addShip(s2);
             gp1.addShip(s3);
@@ -194,6 +211,7 @@ public class MyProjectApplication {
             gp14.addShip(s27);
 
 
+            //ADDSALVO /////////////////////////
             gp1.addSalvo(sal1);
             gp1.addSalvo(sal2);
 
@@ -224,7 +242,7 @@ public class MyProjectApplication {
             gp10.addSalvo(sal19);
             gp10.addSalvo(sal20);
 
-
+            //GAME SAVE/////////////////////////
             game.save(g1);
             game.save(g2);
             game.save(g3);
@@ -234,7 +252,7 @@ public class MyProjectApplication {
             game.save(g7);
             game.save(g8);
 
-
+            //GAMEPLAYER SAVE/////////////////////////
             gamePlayer.save(gp1);
             gamePlayer.save(gp2);
             gamePlayer.save(gp3);
@@ -251,10 +269,13 @@ public class MyProjectApplication {
             gamePlayer.save(gp14);
 
 
+            //GAMESCORE SAVE/////////////////////////
+            GameScore.save(gs1);
+            GameScore.save(gs2);
+            GameScore.save(gs3);
+            GameScore.save(gs4);
 
-
-
-
+            //SHIP SAVE/////////////////////////
             ship.save(s1);
             ship.save(s2);
             ship.save(s3);
@@ -283,6 +304,7 @@ public class MyProjectApplication {
             ship.save(s26);
             ship.save(s27);
 
+            //SALVO SAVE/////////////////////////
             Salvo.save(sal1);
             Salvo.save(sal2);
             Salvo.save(sal3);

@@ -27,6 +27,9 @@ public class Player {
     public String email;
     public String name;
 
+    @OneToMany(mappedBy = "player" , fetch = FetchType.EAGER)
+    public Set<GameScore> gamescores;
+
 
     public Player() { }
 
@@ -50,5 +53,9 @@ public class Player {
 
     public void setEmail(String emailName) {
         email = emailName;
+    }
+
+    public GameScore getGamescores(Game game) {
+        return gamescores.stream().filter(gameScore -> gameScore.getGame().equals(game)).findFirst().orElse(null);
     }
 }

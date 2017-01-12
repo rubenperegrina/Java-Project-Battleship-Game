@@ -15,5 +15,4 @@ package edu.example;
 @RepositoryRestResource
 public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
 
-        //Player findByPlayer(Player player);
 }
