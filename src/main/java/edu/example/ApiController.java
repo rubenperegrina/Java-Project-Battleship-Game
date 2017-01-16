@@ -1,9 +1,9 @@
 package edu.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,6 +133,24 @@ import static java.util.stream.Collectors.toList;
 
         return mySalDto;
     }*/
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @RequestMapping("/api/login")
+    public ResponseEntity<String> createUser(@RequestBody String name) {
+
+        if (name.isEmpty()) {
+            return new ResponseEntity<>("No name given", HttpStatus.FORBIDDEN);
+        }
+
+        List<Player> user = playerRepository.findByName(name);
+        if (user != null) {
+            return new ResponseEntity<>("Name already used", HttpStatus.CONFLICT);
+        }
+
+        playerRepository.save(new Player(name, "12", "12"));
+        return new ResponseEntity<>("Named added", HttpStatus.CREATED);
+    }
 }
 
 

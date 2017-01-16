@@ -33,10 +33,21 @@ public class Player {
 
     public Player() { }
 
-    public Player(String name, String email) {
+    public Player(String name, String email, String password) {
 
         this.email = email;
         this.name = name;
+        this.password = password;
+    }
+
+    public String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public long getId() {
