@@ -23,7 +23,7 @@ public class Game {
     private long id;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER  )
-    public Set<GamePlayer> gameplayers;
+    private Set<GamePlayer> gameplayers;
 
     private Date creationDate;
 
