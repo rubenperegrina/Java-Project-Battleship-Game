@@ -8,10 +8,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <meta charset="UTF-8">
     <title>Games</title>
@@ -19,12 +16,32 @@
 </head>
 <body>
 
+<form id="loginform" name="loginform">
+    <label for="username">Username: </label><input id="username" name="username"><br/>
+    <label for="password">Password:</label><input id="password" name="password"><br/>
+    <button id="login" type="submit">Login!</button>
+    <button id="signin" type="submit">Sign In!</button>
+</form>
+
+<form id="logout">
+    <button type="submit">Log Out!</button>
+</form>
+
 <div id="gameslist"></div>
 
 <table class=" table table-bordered table-striped table-hover">
     <thead class="head"></thead>
     <tbody class="scores"></tbody>
 </table>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
 <script src="salvo.js"></script>
 </body>
 </html>

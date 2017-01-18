@@ -169,22 +169,25 @@ public class ApiController {
     @Autowired
     private PlayerRepository playerRepository;
 
-    @RequestMapping("/api/login")
-    public ResponseEntity<String> createUser(@RequestBody String name) {
-
-        if (name.isEmpty()) {
-            return new ResponseEntity<>("No name given", HttpStatus.FORBIDDEN);
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createUser(@RequestParam String username, String password) {
+        if (username.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "No name"), HttpStatus.FORBIDDEN);
         }
-
-        List<Player> user = playerRepository.findByName(name);
-        if (user != null) {
-            return new ResponseEntity<>("Name already used", HttpStatus.CONFLICT);
+        List <Player> players = playerRepository.findByName(username);
+        if ( !players.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "No such user"), HttpStatus.CONFLICT);
         }
-
-        playerRepository.save(new Player(name, "12", "12"));
-        return new ResponseEntity<>("Named added", HttpStatus.CREATED);
-
+        Player player = playerRepository.save(new Player(username, "ee@hhh.com", password));
+        return new ResponseEntity<>(makeMap("name", player.getName()), HttpStatus.CREATED);
     }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
+
 }
 
 

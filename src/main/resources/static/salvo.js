@@ -2,28 +2,136 @@
  * Created by rubenperegrina on 16/12/16.
  */
 
-var url = "/api/games";
 
-$(function () {
-    $.getJSON(url, scoreGrid);
+
+jQuery(document).ready(function ($) {
+
+    var url = "/api/games";
+
+    $('#logout').hide();
+    //Log In//////////////////////////////////////////////
+    $('#login').on('click', function (event) {
+        event.preventDefault();
+        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+        $.ajax({
+            data: data,
+            timeout: 1000,
+            type: 'POST',
+            url: '/api/login'
+
+
+        }).done(function(data, textStatus, jqXHR) {
+
+            alert('Welcome' + $('#username').val() + '!');
+            $.getJSON(url, scoreGrid);
+            $('.table').show();
+            $('#loginform').hide();
+            $('#logout').show();
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert('Booh! Wrong credentials, try again!');
+        });
+    });
+    //Log Out//////////////////////////////////////////////
+    $('#logout').on('click', function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            timeout: 1000,
+            type: 'POST',
+            url: '/api/logout'
+
+
+        }).done(function(data, textStatus, jqXHR) {
+
+            alert('Bye Bye' + $('#username').val() + '!');
+            $('#loginform').show();
+            $('#logout').hide();
+            $('.table').hide();
+            $(".head").empty();
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert('Check your conexion and try again bro!');
+        });
+    })
 });
+
+
+
+jQuery(document).ready(function ($) {
+
+    var url = "/api/games";
+
+    $('#logout').hide();
+
+    //Sign /In/////////////////////////////////////////////
+    $('#signin').on('click', function (event) {
+        event.preventDefault();
+        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+        $.ajax({
+            data: data,
+            timeout: 1000,
+            type: 'POST',
+            url: '/api/players'
+
+
+        }).done(function (data, textStatus, jqXHR) {
+
+            alert('Welcome' + $('#username').val() + '!, you are a new user!');
+            $.getJSON(url, scoreGrid);
+            $('.table').show();
+            $('#loginform').hide();
+            $('#logout').show();
+
+            login();
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Booh! Wrong credentials, or user already exist!');
+        });
+    });
+
+
+    function login() {
+        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+        $.ajax({
+            data: data,
+            timeout: 1000,
+            type: 'POST',
+            url: '/api/login'
+
+
+        }).done(function(data, textStatus, jqXHR) {
+
+            $.getJSON(url, scoreGrid);
+            $('.table').show();
+            $('#loginform').hide();
+            $('#logout').show();
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert('Booh! Wrong credentials, try again!');
+        });
+    }
+});
+
+
+
 
 function scoreGrid(data) {
 
-    /*console.log(data);*/
+    console.log(data);
     var names = [];
     var scores = {};
     var won = {};
     var lost = {};
     var tied = {};
 
-    $.each(data, function (index) {
+    $.each(data.games, function (index) {
         /*console.log(data[index].gamePlayers);*/
 
-        $.each(data[index].gamePlayers, function (index2) {
+        $.each(data.games[index].gamePlayers, function (index2) {
             /*console.log(data[index].gamePlayers[index2].email);*/
-            var email = data[index].gamePlayers[index2].email;
-            var score = data[index].gamePlayers[index2].score;
+            var email = data.games[index].gamePlayers[index2].email;
+            var score = data.games[index].gamePlayers[index2].score;
 
 
             if ($.inArray(email, names) == -1) {
@@ -66,11 +174,11 @@ function scoreGrid(data) {
         })
 
     })
-    console.log(names);
+    /*console.log(names);
     console.log(scores);
     console.log(won);
     console.log(lost);
-    console.log(tied);
+    console.log(tied);*/
 
     var tittle = ["Name", "Total", "Won", "Lost", "Tied"];
 

@@ -34,9 +34,7 @@ import java.util.List;
 @SpringBootApplication
 public class MyProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MyProjectApplication.class, args);
-	}
+	public static void main(String[] args) { SpringApplication.run(MyProjectApplication.class, args);}
 
 	@Bean
 	public CommandLineRunner initData(PlayerRepository player, GameRepository game, GamePlayerRepository gamePlayer, ShipRepository ship, SalvoRepository Salvo, GameScoreRepository GameScore) {
@@ -383,6 +381,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
+                .antMatchers("/api/players").permitAll()
                 .antMatchers("/api/**").hasAuthority("USER")
                 .and()
                 .formLogin()

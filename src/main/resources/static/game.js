@@ -3,6 +3,26 @@
  */
 
 
+//Log Out//////////////////////////////////////////////
+$('#logout').on('click', function (event) {
+    event.preventDefault();
+
+    $.ajax({
+        timeout: 1000,
+        type: 'POST',
+        url: '/api/logout'
+
+
+    }).done(function(data, textStatus, jqXHR) {
+
+        alert('Bye Bye!');
+        window.location.replace("/games.html");
+
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Check your conexion and try again bro!');
+    });
+})
+
 
 var numbers = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 var letters = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
