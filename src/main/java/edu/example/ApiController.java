@@ -31,6 +31,9 @@ public class ApiController {
     @Autowired
     private PlayerRepository playerrepo;
 
+    @Autowired
+    private ShipRepository repoS;
+
     public List<Game> getAll() {
         return repoG.findAll();
     }
@@ -73,21 +76,13 @@ public class ApiController {
     }
 
 
-
-
-    /*@RequestMapping("/games")
-    public List<Object> getALL() {
-        return repoG.findAll().stream().map(g -> getGameDto(g) ).collect(Collectors.toList());
-    }*/
-
-
     //Game
     public Map<String, Object> getGameDto(Game game) {
         Map<String, Object> myGameDto = new LinkedHashMap<>();
 
         myGameDto.put("id", game.getId());
         myGameDto.put("creation", game.getCreationDate());
-        myGameDto.put("gamePlayers", game.getGameplayers().stream().map(gp -> getGamePlayerDto(gp)).collect(toList()));
+        myGameDto.put("Players", game.getGameplayers().stream().map(gp -> getGamePlayerDto(gp)).collect(toList()));
         return myGameDto;
     }
 
@@ -95,9 +90,9 @@ public class ApiController {
     public Map<String, Object> getGamePlayerDto(GamePlayer gamePlayer) {
         Map<String, Object> myGamePlayerDto = new LinkedHashMap<>();
 
+        myGamePlayerDto.put("gpid", gamePlayer.getId());
         myGamePlayerDto.put("id", gamePlayer.getPlayer().getId());
-        myGamePlayerDto.put("player", gamePlayer.getPlayer().getName());
-        myGamePlayerDto.put("email", gamePlayer.getPlayer().getEmail());
+        myGamePlayerDto.put("name", gamePlayer.getPlayer().getName());
 
 
         if (gamePlayer.getGameScore() != null) {
@@ -109,23 +104,30 @@ public class ApiController {
 ////GAMEVIEW
 
     @RequestMapping("/game_view/{nn}")
+    public Map<String, Object> getGame_View(@PathVariable Long nn, Authentication authentication) {
 
-    public Map<String, Object> getGame_View(@PathVariable Long nn) {
-        Map<String, Object> myViewGame = new LinkedHashMap<>();
+        String currentPlayer = repoGP.findOne(nn).getPlayer().getName();
 
-        myViewGame.put("id", nn);
-        GamePlayer gameplayer = repoGP.findOne(nn);
-        myViewGame.put("creation", gameplayer.getCretionDate());
-        myViewGame.put("gamePlayers", gameplayer.getGame().getGameplayers().stream()
+        if (authentication.getName() != currentPlayer) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("error", HttpStatus.UNAUTHORIZED);
+            return map;
 
-                .map(v -> getViewGamePlayer(v)).collect(toList()));
+        } else {
+            Map<String, Object> myViewGame = new LinkedHashMap<>();
 
-        myViewGame.put("ships", gameplayer.ships.stream().map(s -> getShipDto(s)).collect(toList()));
-        myViewGame.put("salvoes", gameplayer.getGame().getGameplayers().stream().map(sal -> getSalvoDto(sal.getSalvo())).collect(toList()));
+            myViewGame.put("id", nn);
+            GamePlayer gameplayer = repoGP.findOne(nn);
+            myViewGame.put("creation", gameplayer.getCretionDate());
+            myViewGame.put("gamePlayers", gameplayer.getGame().getGameplayers().stream()
 
-        /*myViewGame.put("salvoes", repoGP.findOne(nn).salvo.stream().map(sal -> getSalvoDto(sal)).collect(toList()));*/
+                    .map(v -> getViewGamePlayer(v)).collect(toList()));
 
-        return myViewGame;
+            myViewGame.put("ships", gameplayer.ships.stream().map(s -> getShipDto(s)).collect(toList()));
+            myViewGame.put("salvoes", gameplayer.getGame().getGameplayers().stream().map(sal -> getSalvoDto(sal.getSalvo())).collect(toList()));
+
+            return myViewGame;
+        }
     }
 
 
@@ -174,21 +176,90 @@ public class ApiController {
         if (username.isEmpty()) {
             return new ResponseEntity<>(makeMap("error", "No name"), HttpStatus.FORBIDDEN);
         }
-        List <Player> players = playerRepository.findByName(username);
-        if ( !players.isEmpty()) {
+        List<Player> players = playerRepository.findByName(username);
+        if (!players.isEmpty()) {
             return new ResponseEntity<>(makeMap("error", "No such user"), HttpStatus.CONFLICT);
         }
         Player player = playerRepository.save(new Player(username, "ee@hhh.com", password));
         return new ResponseEntity<>(makeMap("name", player.getName()), HttpStatus.CREATED);
     }
 
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+
+        if (authentication == null) {
+            return new ResponseEntity<>(makeMap("error", "No player"), HttpStatus.UNAUTHORIZED);
+        }
+
+        Player player = playerrepo.findByName(authentication.getName()).get(0);
+
+        Game game = new Game();
+        repoG.save(game);
+
+        GamePlayer gameplayer = new GamePlayer(player, game);
+        repoGP.save(gameplayer);
+
+        return new ResponseEntity<>(makeMap("gpid", gameplayer.getId()), HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(path = "/game/{nn}/players", method = RequestMethod.POST)
+    private ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long nn, Authentication authentication) {
+
+        if (authentication == null) {
+            return new ResponseEntity<>(makeMap("error", "No player"), HttpStatus.UNAUTHORIZED);
+        }
+
+        Player player = playerrepo.findByName(authentication.getName()).get(0);
+
+        Game game = repoG.findOne(nn);
+
+        if (game == null) {
+            return new ResponseEntity<>(makeMap("error", "No game"), HttpStatus.FORBIDDEN);
+        }
+
+        if(game.getGameplayers().size() == 2) {
+            return new ResponseEntity<>(makeMap("error" ,"Game is full"), HttpStatus.FORBIDDEN);
+        }else{
+            GamePlayer gameplayer = new GamePlayer(player, game);
+            repoGP.save(gameplayer);
+            return new ResponseEntity<>(makeMap("gpid", gameplayer.getId()), HttpStatus.CREATED);
+        }
+    }
+
+
+    @RequestMapping(path = "/games/players/{nn}/ships", method = RequestMethod.POST)
+    private ResponseEntity<Map<String, Object>> CreatedShips(@PathVariable Long nn, List <Ship> ships, Authentication authentication) {
+
+        if(authentication == null) {
+            return new ResponseEntity<>(makeMap("error", "No current user logged"), HttpStatus.UNAUTHORIZED);
+        }
+
+        GamePlayer gamePlayer = repoGP.findOne(nn);
+
+        if(gamePlayer.getId() != nn) {
+            return new ResponseEntity<>(makeMap("error", "No game player with the given ID"), HttpStatus.UNAUTHORIZED);
+        }
+
+        if(authentication.getName() != gamePlayer.getPlayer().getName()) {
+            return new ResponseEntity<>(makeMap("error", "The current user is not the game player the ID"), HttpStatus.UNAUTHORIZED);
+        }
+
+        if(gamePlayer.getShips().isEmpty()) {
+                ships.forEach(ship -> ship.setGamePlayer(gamePlayer));
+                ships.forEach(ship -> repoS.save(ship));
+            return new ResponseEntity<>(makeMap("sucess", "Ships created!"), HttpStatus.CREATED);
+        }else {
+            return new ResponseEntity<>(makeMap("error", "Ships are full"), HttpStatus.FORBIDDEN);
+        }
+    }
+
+
+
     private Map<String, Object> makeMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
         return map;
     }
-
 }
-
-
 

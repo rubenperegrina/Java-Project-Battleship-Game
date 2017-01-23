@@ -3,6 +3,32 @@
  */
 
 
+jQuery(document).ready(function ($) {
+
+    getCookies();
+    login();
+
+    //Create Game/////////////////////////////////////////////
+    $('#creategame').on('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+            timeout: 1000,
+            type: 'POST',
+            url: '/api/games'
+
+
+        }).done(function (data, textStatus, jqXHR) {
+            var nn = jqXHR.responseJSON.gpid;
+            alert('The Game has created!');
+            window.location.replace("/game.html?gp=" + nn );
+
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('The Game doesn tcreate!');
+        });
+    });
+});
+
 
 jQuery(document).ready(function ($) {
 
@@ -20,15 +46,18 @@ jQuery(document).ready(function ($) {
             url: '/api/login'
 
 
-        }).done(function(data, textStatus, jqXHR) {
+        }).done(function (data, textStatus, jqXHR) {
 
             alert('Welcome' + $('#username').val() + '!');
             $.getJSON(url, scoreGrid);
             $('.table').show();
+            $('.gamelist').show();
             $('#loginform').hide();
             $('#logout').show();
+            $('#login').hide();
+            $('#signin').hide();
 
-        }).fail(function(jqXHR, textStatus, errorThrown) {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Booh! Wrong credentials, try again!');
         });
     });
@@ -42,20 +71,23 @@ jQuery(document).ready(function ($) {
             url: '/api/logout'
 
 
-        }).done(function(data, textStatus, jqXHR) {
+        }).done(function (data, textStatus, jqXHR) {
 
             alert('Bye Bye' + $('#username').val() + '!');
             $('#loginform').show();
             $('#logout').hide();
             $('.table').hide();
+            $('.gamelist').hide();
             $(".head").empty();
+            $(".gamelist").empty();
+            $('#login').show();
+            $('#signin').show();
 
-        }).fail(function(jqXHR, textStatus, errorThrown) {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Check your conexion and try again bro!');
         });
     })
 });
-
 
 
 jQuery(document).ready(function ($) {
@@ -82,6 +114,8 @@ jQuery(document).ready(function ($) {
             $('.table').show();
             $('#loginform').hide();
             $('#logout').show();
+            $('#login').hide();
+            $('#signin').hide();
 
             login();
 
@@ -93,6 +127,7 @@ jQuery(document).ready(function ($) {
 
     function login() {
         var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+        setCookies();
         $.ajax({
             data: data,
             timeout: 1000,
@@ -100,25 +135,22 @@ jQuery(document).ready(function ($) {
             url: '/api/login'
 
 
-        }).done(function(data, textStatus, jqXHR) {
+        }).done(function (data, textStatus, jqXHR) {
 
             $.getJSON(url, scoreGrid);
             $('.table').show();
             $('#loginform').hide();
             $('#logout').show();
 
-        }).fail(function(jqXHR, textStatus, errorThrown) {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Booh! Wrong credentials, try again!');
         });
     }
 });
 
 
-
-
 function scoreGrid(data) {
 
-    console.log(data);
     var names = [];
     var scores = {};
     var won = {};
@@ -128,10 +160,10 @@ function scoreGrid(data) {
     $.each(data.games, function (index) {
         /*console.log(data[index].gamePlayers);*/
 
-        $.each(data.games[index].gamePlayers, function (index2) {
+        $.each(data.games[index].Players, function (index2) {
             /*console.log(data[index].gamePlayers[index2].email);*/
-            var email = data.games[index].gamePlayers[index2].email;
-            var score = data.games[index].gamePlayers[index2].score;
+            var email = data.games[index].Players[index2].name;
+            var score = data.games[index].Players[index2].score;
 
 
             if ($.inArray(email, names) == -1) {
@@ -175,10 +207,10 @@ function scoreGrid(data) {
 
     })
     /*console.log(names);
-    console.log(scores);
-    console.log(won);
-    console.log(lost);
-    console.log(tied);*/
+     console.log(scores);
+     console.log(won);
+     console.log(lost);
+     console.log(tied);*/
 
     var tittle = ["Name", "Total", "Won", "Lost", "Tied"];
 
@@ -218,150 +250,96 @@ function scoreGrid(data) {
 
         $(".scores").append(row);
     })
+
+    $.each(data.games, function (index) {
+
+
+        var li = $("<li class='singleGame'></li>");
+        var url;
+
+        li.append("<span class='td'>" + 'GameId: ' + data.games[index].id + "__" + "</span>");
+
+        $.each(data.games[index].Players, function (index2) {
+            li.append("<span class='td'>" + 'Gp Id: ' + data.games[index].Players[index2].gpid + "/ " + "</span>");
+            li.append("<span class='td'>" + 'Player Id: ' + data.games[index].Players[index2].id + "/ " + "</span>");
+            li.append("<span> " + data.games[index].Players[index2].name + "</span>");
+
+            if(data.games[index].Players.length == 1) {
+                var button = $('<button/>', {
+                    text: 'JOIN',
+                    id: 'btn' + data.games[index].id,
+                    class: 'btn btn-primary',
+                    click: function() {
+                        url2 = 'api/game/' + data.games[index].id + '/players';
+                        $.ajax({
+                            timeout: 1000,
+                            type: 'POST',
+                            url: url2
+
+                        }).done(function(data, textStatus, jqXHR) {
+                            gpDestination = jqXHR.responseJSON.gpid;
+                            url = "game.html?gp=" + gpDestination;
+                            window.location.replace(url);
+
+                        }).fail(function() {
+                            alert('Something fail!');
+                        })
+                    }
+                })
+            }
+
+            if (data.player[0].id == data.games[index].Players[index2].id) {
+                url = 'game.html?gp=' + data.games[index].Players[index2].gpid;
+            }else {
+                li.append(button);
+            }
+        })
+
+
+            if (url != undefined) {
+
+                var playButton = $('<button/>', {
+                    text: 'PLAY',
+                    id: 'play_game' + data.games[index].id,
+                    class: 'btn btn-warning',
+                    click: function() {
+                        window.location.replace(url);
+                    }
+                });
+
+                li.append(playButton);
+                $(".gamelist")
+                    .append(li)
+
+            } else {
+                $(".gamelist")
+                    .append(li)
+            }
+    })
 }
 
 
-/*function scoreGrid(data) {
- for(var i = 0; i<data.length; i++) {
- console.log(data);
- /!*var length1 = data[i].gamePlayers[0];*!/
+function setCookies() {
 
- var Player1 = data[i].gamePlayers[i];
- var Player2 = data[i].gamePlayers[i];
- console.log(Player1.email);
- console.log(Player2.email);
- console.log(Player1.score);
- console.log(Player2.score);
+    var username = $('#username').val();
+    var password = $('#password').val();
+    // set cookies to expire in 14 days
+    $.cookie('username', username, {expires: 14});
+    $.cookie('password', password, {expires: 14});
+    $.cookie('remember', true, {expires: 14});
 
- if(Player1.score == 1) {
- var win = [player] = 1
- }
- console.log(win);
- /!*console.log("1---" + Player1.email + "-" + Player1.score);
- console.log("2---" + Player2.email + "-" + Player2.score);*!/
- /!*console.log("Score 1, 2---" + Player1.score + "-" + Player2.score);*!/
- }
+}
 
- console.log(Player2.score);
+function getCookies() {
 
- for(var j = 0; j<data.length; j++) {
+    var remember = $.cookie('remember');
 
- var Player1 = data[i].gamePlayers[j];
- var Player2 = data[i].gamePlayers[j];
+    if (remember == 'true') {
+        var username = $.cookie('username');
+        var password = $.cookie('password');
+        // autofill the fields
+        $('#username').attr("value", username);
+        $('#password').attr("value", password);
+    }
 
-
- }
-
- var players = Player1.email + Player2.email;
- var scores = Player1.score + Player2.score;
-
-
- var tittle = [" ", "Name", "Total", "Won", "Lost", "Tied"];
-
- scoreGrid();*/
-/*$(function() {
-
- console.log("Getting the JSON");
-
- $.getJSON(url, jsongames);
-
- console.log("JSON is coming...");
- });*/
-
-
-/*function jsongames(data) {
-
- console.log(data);
-
- var gameslist = document.getElementById("gameslist");
-
- var list = "<ol>";
-
- for (var i = 0; i<data.length; i++) {
-
- var Player1 = data[i].gamePlayers[0];
- var Player2 = data[i].gamePlayers[1];
- /!*console.log("1---" + Player1.email + "-" + Player1.score);
- console.log("2---" + Player2.email + "-" + Player2.score);*!/
-
- if(Player2) {
- list += "<li>" + data[i].id +"-" + new Date(data[i].creation).toLocaleString()
- + "-" + Player1.email + "-" + Player1.id + "-" + Player1.player + "-" + "Score " + Player1.score
- +  " VS " + Player2.email + "-" + Player2.id + "-" + Player2.player + "-" + "Score " + Player2.score + "</li>";
- }else {
- list += "<li>" + data[i].id +"-" + new Date(data[i].creation).toLocaleString()
- + "-" + Player1.email + "-" + Player1.id + "-" + Player1.player + "-" + "Score " + Player1.score + "</li>";
- }
- }
-
- list += "</ol>";
- gameslist.innerHTML = list;
- }*/
-
-/*$(function() {
- $.getJSON(url, scoreGrid);
- });
-
- function scoreGrid(data) {
- for(var i = 0; i<data.length; i++) {
-
- /!*var length1 = data[i].gamePlayers[0];*!/
-
- var Player1 = data[i].gamePlayers[0];
- var Player2 = data[i].gamePlayers[1];
- /!*console.log("1---" + Player1.email + "-" + Player1.score);
- console.log("2---" + Player2.email + "-" + Player2.score);*!/
- console.log("Score 1, 2---" + Player1.score + "-" + Player2.score);
-
- }*/
-
-/*for (var i = 0; i<length1.length; i++) {
-
- /!*console.log("data[i].gamePlayers[0].email " + data[i].gamePlayers[0].email);
- console.log("data[i].gamePlayers[i].email " + data[i].gamePlayers[i].email);
- console.log("data[i].gamePlayers[0] " + data[i].gamePlayers[0]);*!/
-
- var player = length1.email;
- var emaillength = length1.email.length;
- }*/
-
-/*var players = Player1.email + Player2.email;
- var scores = Player1.score + Player2.score;
- console.log(players);
- console.log(scores);
-
- var tittle = [" ", "Name", "Total", "Won", "Lost", "Tied"];*/
-/*var player = data[i].gamePlayers[0].email;*/
-
-/*$(".scores").empty();
-
- for (var i = 0; i < (5 + 1); i++) {
- var row = $("<tr class='rows'></tr>");
-
- for (var j = 0; j < (5 + 1); j++)
-
- if (i == 0) {
-
- row.append("<td class='cells heads'>" + tittle[j] + "</td>");
-
- } else {
-
- if (j == 0) {
-
- row.append("<td class='cells heads'>" + players[i - 1] + "</td>");
- row.append("<td class='cells heads'>" + scores[i - 1] + "</td>");
-
- } else {
-
- row.append("<td class='cells' id='" + players[i-1] + scores[i-1] + tittle[j] + "'></td>");
-
- }
-
- }
- $(".scores").append(row);
- }
-
- }*/
-
-/*
- scoreGrid();*/
+}

@@ -75,4 +75,8 @@ public class GamePlayer {
     public GameScore getGameScore() {
     return player.getGamescores(game);
     }
+
+    public Set<Ship> getShips() {
+        return ships;
+    }
 }

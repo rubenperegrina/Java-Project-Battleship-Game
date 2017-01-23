@@ -3,11 +3,12 @@
 <head>
     <link href="games.css" rel="stylesheet" type="text/css">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 
     <meta charset="UTF-8">
@@ -16,32 +17,50 @@
 </head>
 <body>
 
-<form id="loginform" name="loginform">
-    <label for="username">Username: </label><input id="username" name="username"><br/>
-    <label for="password">Password:</label><input id="password" name="password"><br/>
-    <button id="login" type="submit">Login!</button>
-    <button id="signin" type="submit">Sign In!</button>
+<div class="row">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-8">
+<form id="form">
+    <div id="loginform">
+        <label for="username">Username: </label><input id="username" name="username"><br/>
+        <label for="password">Password:</label><input id="password" name="password"><br/>
+        <input type="checkbox" name="remember" id="remember"/>
+        <label for="remember">Remember!</label>
+    </div>
+    <button id="login" class="btn btn-primary" type="submit">Login!</button>
+    <button id="signin" class="btn btn-success" type="submit">Sign In!</button>
+    <button id="logout" class="btn btn-warning" type="submit">Log Out!</button>
+    <button id="creategame" class="btn btn-info btn-sm" type="submit">Create Game!</button>
 </form>
+    </div>
+    <div class="col-xs-2"></div>
+</div>
 
-<form id="logout">
-    <button type="submit">Log Out!</button>
-</form>
 
-<div id="gameslist"></div>
-
-<table class=" table table-bordered table-striped table-hover">
-    <thead class="head"></thead>
-    <tbody class="scores"></tbody>
-</table>
-
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="head"></thead>
+                <tbody class="scores"></tbody>
+            </table>
+        </div>
+        <div class="col-xs-6">
+            <ol class="gamelist">
+            </ol>
+        </div>
+    </div>
+</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 
 
-
+<script src="jquerycookie/jquery.cookie.js"></script>
 <script src="salvo.js"></script>
 </body>
 </html>

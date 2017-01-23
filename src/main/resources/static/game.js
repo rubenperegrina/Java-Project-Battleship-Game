@@ -86,7 +86,6 @@ function drawShips () {
         $.each(data.ships, function (ship) {
 
             var location = data.ships[ship].location;
-            console.log(data.ships[ship].location);
 
             $.each(location, function (cell) {
 
@@ -97,8 +96,8 @@ function drawShips () {
 
         $.each(data.gamePlayers, function(player) {
 
-            var email = data.gamePlayers[player].player.email;
-            var id = data.gamePlayers[player].id;
+            var email = data.gamePlayers[player].player.name;
+            var id = data.gamePlayers[player].player.id;
 
             if (nn == id) {
 
@@ -121,8 +120,6 @@ function drawShips () {
 
                 $.each(data.salvoes[salvo][cell].locations, function(cell2) {
 
-                    console.log(data.salvoes[salvo][cell].player);
-                    console.log(data.gamePlayers[0].player.id);
 
                     var salvoCells = data.salvoes[salvo][cell].locations[cell2];
 
