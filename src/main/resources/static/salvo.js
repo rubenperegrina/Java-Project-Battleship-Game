@@ -2,11 +2,13 @@
  * Created by rubenperegrina on 16/12/16.
  */
 
+var url = "/api/games";
+
 
 jQuery(document).ready(function ($) {
 
     getCookies();
-    login();
+
 
     //Create Game/////////////////////////////////////////////
     $('#creategame').on('click', function (event) {
@@ -32,35 +34,19 @@ jQuery(document).ready(function ($) {
 
 jQuery(document).ready(function ($) {
 
-    var url = "/api/games";
+
 
     $('#logout').hide();
+    $('#creategame').hide();
     //Log In//////////////////////////////////////////////
+
+
     $('#login').on('click', function (event) {
-        event.preventDefault();
-        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
-        $.ajax({
-            data: data,
-            timeout: 1000,
-            type: 'POST',
-            url: '/api/login'
-
-
-        }).done(function (data, textStatus, jqXHR) {
-
-            alert('Welcome' + $('#username').val() + '!');
-            $.getJSON(url, scoreGrid);
-            $('.table').show();
-            $('.gamelist').show();
-            $('#loginform').hide();
-            $('#logout').show();
-            $('#login').hide();
-            $('#signin').hide();
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert('Booh! Wrong credentials, try again!');
-        });
+        var loginmessage = ('Welcome' + $('#username').val() + '!');
+        login(loginmessage);
     });
+
+
     //Log Out//////////////////////////////////////////////
     $('#logout').on('click', function (event) {
         event.preventDefault();
@@ -74,14 +60,14 @@ jQuery(document).ready(function ($) {
         }).done(function (data, textStatus, jqXHR) {
 
             alert('Bye Bye' + $('#username').val() + '!');
-            $('#loginform').show();
             $('#logout').hide();
+            $('#creategame').hide();
             $('.table').hide();
             $('.gamelist').hide();
             $(".head").empty();
             $(".gamelist").empty();
-            $('#login').show();
-            $('#signin').show();
+            $('.login-wrap').show();
+            $('body').addClass('image1');
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Check your conexion and try again bro!');
@@ -99,7 +85,7 @@ jQuery(document).ready(function ($) {
     //Sign /In/////////////////////////////////////////////
     $('#signin').on('click', function (event) {
         event.preventDefault();
-        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+        var data = 'username=' + $('#username1').val() + '&password=' + $('#password1').val();
         $.ajax({
             data: data,
             timeout: 1000,
@@ -109,43 +95,14 @@ jQuery(document).ready(function ($) {
 
         }).done(function (data, textStatus, jqXHR) {
 
-            alert('Welcome' + $('#username').val() + '!, you are a new user!');
+            var signinmessage = ('Welcome ' + $('#username1').val() + '!, you are a new user!');
             $.getJSON(url, scoreGrid);
-            $('.table').show();
-            $('#loginform').hide();
-            $('#logout').show();
-            $('#login').hide();
-            $('#signin').hide();
-
-            login();
+            login(signinmessage);
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Booh! Wrong credentials, or user already exist!');
         });
     });
-
-
-    function login() {
-        var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
-        setCookies();
-        $.ajax({
-            data: data,
-            timeout: 1000,
-            type: 'POST',
-            url: '/api/login'
-
-
-        }).done(function (data, textStatus, jqXHR) {
-
-            $.getJSON(url, scoreGrid);
-            $('.table').show();
-            $('#loginform').hide();
-            $('#logout').show();
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert('Booh! Wrong credentials, try again!');
-        });
-    }
 });
 
 
@@ -158,10 +115,9 @@ function scoreGrid(data) {
     var tied = {};
 
     $.each(data.games, function (index) {
-        /*console.log(data[index].gamePlayers);*/
 
         $.each(data.games[index].Players, function (index2) {
-            /*console.log(data[index].gamePlayers[index2].email);*/
+
             var email = data.games[index].Players[index2].name;
             var score = data.games[index].Players[index2].score;
 
@@ -206,11 +162,7 @@ function scoreGrid(data) {
         })
 
     })
-    /*console.log(names);
-     console.log(scores);
-     console.log(won);
-     console.log(lost);
-     console.log(tied);*/
+
 
     var tittle = ["Name", "Total", "Won", "Lost", "Tied"];
 
@@ -257,11 +209,11 @@ function scoreGrid(data) {
         var li = $("<li class='singleGame'></li>");
         var url;
 
-        li.append("<span class='td'>" + 'GameId: ' + data.games[index].id + "__" + "</span>");
+        li.append("<span class='td'>" + 'Game: ' + data.games[index].id + "" + "</span>");
 
         $.each(data.games[index].Players, function (index2) {
-            li.append("<span class='td'>" + 'Gp Id: ' + data.games[index].Players[index2].gpid + "/ " + "</span>");
-            li.append("<span class='td'>" + 'Player Id: ' + data.games[index].Players[index2].id + "/ " + "</span>");
+            /*li.append("<span class='td'>" + 'Gp Id: ' + data.games[index].Players[index2].gpid + "/ " + "</span>");*/
+           /* li.append("<span class='td'>" + 'Player Id: ' + data.games[index].Players[index2].id + "/ " + "</span>");*/
             li.append("<span> " + data.games[index].Players[index2].name + "</span>");
 
             if(data.games[index].Players.length == 1) {
@@ -342,4 +294,32 @@ function getCookies() {
         $('#password').attr("value", password);
     }
 
+}
+
+function login(welcomemessage) {
+
+    event.preventDefault();
+    var data = 'username=' + $('#username').val() + '&password=' + $('#password').val();
+    $.ajax({
+        data: data,
+        timeout: 1000,
+        type: 'POST',
+        url: '/api/login'
+
+
+    }).done(function (data, textStatus, jqXHR) {
+
+        alert(welcomemessage);
+        $.getJSON(url, scoreGrid);
+        $('.table').show();
+        $('.gamelist').show();
+        $('#logout').show();
+        $('#creategame').show();
+        $('.login-wrap').hide();
+        $('body').removeClass('image1');
+        $('body').addClass('image2');
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert('Booh! Wrong credentials, try again!');
+    });
 }

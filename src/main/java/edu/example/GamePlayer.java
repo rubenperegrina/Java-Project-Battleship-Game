@@ -79,4 +79,15 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
+
+    public long getLastTurn() {
+        if(!this.getSalvo().isEmpty()) {
+            return this.getSalvo()
+                    .stream()
+                    .map(s-> s.getTurn())
+                    .max((x, y) -> Long.compare(x, y)).get();
+        }else {
+            return 0;
+        }
+    }
 }

@@ -18,6 +18,10 @@ public class Salvo {
         return id;
     }
 
+    public void setTurn(long turn) {
+        this.turn = turn;
+    }
+
     @ElementCollection
     private List<String> locations;
 

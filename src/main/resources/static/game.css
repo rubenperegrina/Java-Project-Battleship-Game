@@ -1,41 +1,68 @@
 
-table {
-    background: radial-gradient(greenyellow, forestgreen, darkgreen);
+
+body {
+    background-color: #1161ee !important;
+}
+
+.row {
+    width: 100% !important;
+}
+
+.grid {
+    background-image: radial-gradient(#1161ee, #0609d7, #0408b1);
     width:90%;
 }
 
-.cells
-{
+.salvoes {
+    background: deepskyblue;
+    width:50%;
+}
+
+.cells {
     height:50px;
     width:50px;
     border:0.5px solid black;
     display:table-cell;
     vertical-align: middle;
     text-align: center;
+    /*background-image: url("https://openclipart.org/image/2400px/svg_to_png/231714/Simple-Water-Icon-3.png");
+    background-size: cover;*/
 }
 
 
 .heads {
-    background-color: black;
+    background-color: black !important;
+    background-image: none !important;
     color: white;
 }
 
 .ship {
-    background: darkslategrey;
+  /*  background: darkslategrey;*/
+    background-image: url("http://www.clker.com/cliparts/a/a/a/6/1358280391485527825Battleship.svg.hi.png");
+    background-size: cover;
+}
+
+.ships {
+    /*  background: darkslategrey;*/
+    background-image: url("http://www.clker.com/cliparts/a/a/a/6/1358280391485527825Battleship.svg.hi.png");
+    background-size: contain;
 }
 
 #names {
-    background-color:dimgrey;
+    /*background-color:dimgrey;*/
     font-size: 30px;
-    color: white;
+    color: black;
 }
 
-//SALVOES//////////////////////////////////
 
 #salvonames {
     background-color:dimgrey;
     font-size: 30px;
     color: white;
+}
+
+.salvo {
+    background-color: yellow;
 }
 
 .salvocell {
@@ -46,3 +73,66 @@ table {
     background:red;
 }
 
+.casillas {
+    width: 30px;
+}
+
+.done {
+    width: 50px !important;
+    height: 30px !important;
+    background-color: red !important;
+}
+
+.carriership {
+    width: 250px;
+    height: 30px;
+    background-color: #1161ee;
+}
+
+.battleship {
+    width: 200px;
+    height: 30px;
+    background-color: #1161ee;
+}
+
+.submarineship {
+    width: 150px;
+    height: 30px;
+    background-color: #1161ee;
+}
+
+.destroyership {
+    width: 150px;
+    height: 30px;
+    background-color: #1161ee;
+}
+.patrolboatship {
+    width: 100px;
+    height: 30px;
+    background-color: #1161ee;
+}
+
+li {
+    list-style: none;
+}
+
+.tempship {
+    /*background-color: darkslategrey;*/
+    background-image: url("http://www.clker.com/cliparts/a/a/a/6/1358280391485527825Battleship.svg.hi.png");
+    background-size: cover;
+    animation:blinker 1s linear infinite;
+}
+
+.tempwrongship {
+    background-color: red;
+    animation:blinker 1s linear infinite;
+}
+
+.shipclick {
+    animation:blinker 1s linear infinite;
+}
+
+@-webkit-keyframes blinker {
+    from { opacity: 1.0; }
+    to { opacity: 0.0; }
+}

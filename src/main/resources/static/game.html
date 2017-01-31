@@ -18,20 +18,60 @@
 <body>
 
 <form id="logout">
-    <button type="submit">Log Out!</button>
+    <button class="btn btn-danger" type="submit">Log Out!</button>
 </form>
-
+<button id="salvoesbutton" class="btn btn-primary" type="submit">Send Salvoes!</button>
 <form>
     <label></label>
 </form>
 <div id="names"></div>
-<table class="grid"></table>
+
+<!--GRIDS-->
+
+<div class="row">
+
+    <table class="grid col-xs-7"></table>
+
+    <ul class="col-xs-5 infoships">
+
+        <form>
+            <button id="createships" class="btn btn-primary" type="submit">Create Ships!</button>
+
+            <input name="ship" id="horizontal" class="btn btn-primary" checked value="horizontal" type="radio">Horizontal
+            Ships!
+            <input name="ship" id="vertical" class="btn btn-primary" value="vertical" type="radio">Vertical Ships!
+        </form>
+
+        <h3>Aviable Ships!</h3>
+
+        <li class="nameship">Carrier</li>
+        <li class="carriership ships" data-index="0" data-shipsize="5"></li>
+
+        <li class="nameship">Battleship</li>
+        <li class="battleship ships" data-index="1" data-shipsize="4"></li>
+
+        <li class="nameship">Submarine</li>
+        <li class="submarineship ships" data-index="2" data-shipsize="3"></li>
+
+        <li class="nameship">Destroyer</li>
+        <li class="destroyership ships" data-index="3" data-shipsize="3"></li>
+
+        <li class="nameship">Patrol Boat</li>
+        <li class="patrolboatship ships" data-index="4" data-shipsize="2"></li>
+
+        <br>
+
+            <button id="undo" class="btn btn-danger">Undo Ships!</button>
+
+    </ul>
+    <table class="salvoes col-xs-5"></table>
+
+</div>
+<div id="salvonames"></div>
 
 <form>
     <label></label>
 </form>
-<div id="salvonames"></div>
-<table class="salvoes"></table>
 
 
 <script src="game.js"></script>

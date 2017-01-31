@@ -34,6 +34,9 @@ public class ApiController {
     @Autowired
     private ShipRepository repoS;
 
+    @Autowired
+    private SalvoRepository repoSalvo;
+
     public List<Game> getAll() {
         return repoG.findAll();
     }
@@ -187,7 +190,7 @@ public class ApiController {
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
 
-        if (authentication == null) {
+        if (isGuest(authentication)) {
             return new ResponseEntity<>(makeMap("error", "No player"), HttpStatus.UNAUTHORIZED);
         }
 
@@ -227,9 +230,9 @@ public class ApiController {
         }
     }
 
-
+    //Ships
     @RequestMapping(path = "/games/players/{nn}/ships", method = RequestMethod.POST)
-    private ResponseEntity<Map<String, Object>> CreatedShips(@PathVariable Long nn, List <Ship> ships, Authentication authentication) {
+    private ResponseEntity<Map<String, Object>> createdShips(@PathVariable Long nn, @RequestBody List <Ship> ships, Authentication authentication) {
 
         if(authentication == null) {
             return new ResponseEntity<>(makeMap("error", "No current user logged"), HttpStatus.UNAUTHORIZED);
@@ -255,6 +258,31 @@ public class ApiController {
     }
 
 
+    //Salvo
+    @RequestMapping(path = "/games/players/{nn}/salvos", method = RequestMethod.POST)
+    private ResponseEntity<Map<String, Object>> createdSalvos(@PathVariable Long nn, @RequestBody Salvo salvo, Authentication authentication) {
+
+        if(authentication == null) {
+            return new ResponseEntity<>(makeMap("error", "No current user logged"), HttpStatus.UNAUTHORIZED);
+        }
+
+        GamePlayer gamePlayer = repoGP.findOne(nn);
+
+        if(gamePlayer.getId() != nn) {
+            return new ResponseEntity<>(makeMap("error", "No game player with the given ID"), HttpStatus.UNAUTHORIZED);
+        }
+
+        if(authentication.getName() != gamePlayer.getPlayer().getName()) {
+            return new ResponseEntity<>(makeMap("error", "The current user is not the game player the ID"), HttpStatus.UNAUTHORIZED);
+        }
+
+        salvo.setTurn(gamePlayer.getLastTurn() + 1);
+
+            salvo.setGamePlayer(gamePlayer);
+            repoSalvo.save(salvo);
+            return new ResponseEntity<>(makeMap("sucess", "Add and save a Salvo!"), HttpStatus.CREATED);
+
+        }
 
     private Map<String, Object> makeMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
