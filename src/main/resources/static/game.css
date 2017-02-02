@@ -10,11 +10,12 @@ body {
 
 .grid {
     background-image: radial-gradient(#1161ee, #0609d7, #0408b1);
-    width:90%;
+    /*width:90%;*/
 }
 
 .salvoes {
     background: deepskyblue;
+    height: 60%;
     width:50%;
 }
 
@@ -62,11 +63,15 @@ body {
 }
 
 .salvo {
-    background-color: yellow;
+    /*background-color: yellow;*/
+    background-image: url(images/Bloque_interrogacion2.png);
+    background-size: cover;
 }
 
 .salvocell {
-    background: blue;
+    background-image: url("https://openclipart.org/image/2400px/svg_to_png/231714/Simple-Water-Icon-3.png");
+    background-size: cover;
+    /*background: blue;*/
 }
 
 .shoot {

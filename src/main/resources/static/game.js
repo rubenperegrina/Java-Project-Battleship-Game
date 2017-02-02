@@ -260,13 +260,19 @@ jQuery(document).ready(function ($) {
     /**********Print Salvo in Salvo Grid***************/
     function printsalvoinsalvogrid () {
 
-        $('.salvoes .cells').on('click', function (cell) {
+        $('.salvoes .cells').on('click', function () {
 
-            if(salvoesloc.length == 3) {
-                alert('You must send 3 Salvoes!');
+            if(salvoesloc.length > 2) {
+                alert('You must send  Salvoes!');
 
             }else if($(this).hasClass('salvo')) {
                 alert('You have fired en this location!');
+
+            }else if($(this).hasClass('salvocell')) {
+                alert('You have fired en this location, try another!');
+
+            }else if($(this).hasClass('heads')) {
+                alert('I don´t bet for you');
             }else {
                 $(this).addClass("salvo");
                 salvoesloc.push(this.id);
@@ -279,6 +285,11 @@ jQuery(document).ready(function ($) {
 
     /**********Send Salvo Locations to have a request**/
     $('#salvoesbutton').on('click', function (event) {
+
+        if(salvoesloc.length < 3) {
+            alert('You must send 3 Salvoes!');
+        }else if(salvoesloc.length == 3) {
+
         event.preventDefault();
         var nn = getParameterByName('gp');
         $.post({
@@ -296,6 +307,7 @@ jQuery(document).ready(function ($) {
         }).fail(function () {
             alert('Something wrong!');
         });
+        }
     });
 
     /**********Call initial functions******************/
@@ -406,10 +418,14 @@ function drawShips() {
 
             var email = data.gamePlayers[player].player.name;
             var id = data.gamePlayers[player].player.id;
+            var gpid = data.gamePlayers[player].id;
+            console.log(nn);
+            console.log(id);
 
-            if (nn == id) {
+            if (nn == gpid) {
 
                 $("#names").append(email + "(You)");
+
                 playerid = data.gamePlayers[player].player.id;
             }
             else {
@@ -430,8 +446,12 @@ function drawShips() {
 
 
                     var salvoCells = data.salvoes[salvo][cell].locations[cell2];
-                    console.log(data.salvoes[salvo][cell].turn);
+                    console.log(salvoCells);
+
                     if (data.salvoes[salvo][cell].player == playerid) {
+
+
+
                         $("#" + salvoCells + "S").addClass("salvocell");
                         $("#" + salvoCells + "S").html(data.salvoes[salvo][cell].turn);
 

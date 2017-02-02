@@ -22,6 +22,8 @@ public class Ship {
     @JoinColumn(name = "gameplayer_id")
     private GamePlayer gamePlayer;
 
+    private boolean sunk = false;
+
     public Ship() {
     }
 
@@ -48,5 +50,11 @@ public class Ship {
 
     public long getId() {
         return id;
+    }
+
+    public boolean isSunk() {return sunk;}
+
+    public void setSunk(boolean sunk) {
+        this.sunk = sunk;
     }
 }
